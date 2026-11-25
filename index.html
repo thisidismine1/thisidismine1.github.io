@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>밤의 서랍 — 괴담 수집소</title>
+  <style>
+    :root {
+      --night: #111614;
+      --panel: #1a211e;
+      --paper: #e8e3d6;
+      --muted: #aaa99e;
+      --line: #39413c;
+      --red: #b96657;
+      --green: #9caf91;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--night);
+      color: var(--paper);
+      font-family: Georgia, "Noto Serif KR", serif;
+    }
+
+    .page {
+      width: min(900px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+      color: var(--muted);
+      font: 12px Arial, sans-serif;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .brand { color: var(--paper); font-weight: bold; }
+
+    .intro { padding: 72px 0 42px; }
+
+    .eyebrow {
+      color: var(--red);
+      font: 12px Arial, sans-serif;
+      letter-spacing: 0.16em;
+    }
+
+    h1 {
+      margin: 14px 0;
+      font-size: clamp(48px, 9vw, 88px);
+      font-weight: normal;
+      letter-spacing: -0.06em;
+      line-height: 1;
+    }
+
+    .intro p {
+      max-width: 560px;
+      color: var(--muted);
+      font: 15px/1.8 Arial, sans-serif;
+    }
+
+    .note {
+      display: inline-block;
+      margin-top: 10px;
+      border: 1px solid var(--line);
+      padding: 8px 11px;
+      color: var(--green);
+      font: 11px Arial, sans-serif;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+      color: var(--muted);
+      font: 12px Arial, sans-serif;
+    }
+
+    .buttons { display: flex; gap: 8px; }
+
+    button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--paper);
+      padding: 9px 13px;
+      cursor: pointer;
+      font: 12px Arial, sans-serif;
+    }
+
+    button:hover,
+    button.active {
+      border-color: var(--red);
+      background: var(--red);
+      color: white;
+    }
+
+    #stories {
+      display: grid;
+      gap: 14px;
+      margin: 20px 0 38px;
+    }
+
+    .story {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      padding: 22px;
+    }
+
+    .story-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .place {
+      color: var(--green);
+      font: 11px Arial, sans-serif;
+      letter-spacing: 0.08em;
+    }
+
+    .fear {
+      color: var(--red);
+      white-space: nowrap;
+      font: 12px Arial, sans-serif;
+    }
+
+    h2 {
+      margin: 10px 0;
+      font-size: 26px;
+      font-weight: normal;
+    }
+
+    .teaser {
+      margin: 0;
+      color: var(--muted);
+      font: 14px/1.7 Arial, sans-serif;
+    }
+
+    details { margin-top: 16px; }
+
+    summary {
+      color: var(--paper);
+      cursor: pointer;
+      font: 12px Arial, sans-serif;
+    }
+
+    .full-story {
+      max-width: 680px;
+      color: #d2cfc4;
+      font: 14px/1.9 Arial, sans-serif;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      color: var(--muted);
+      font: 12px/1.7 Arial, sans-serif;
+    }
+
+    footer strong { color: var(--green); }
+
+    @media (max-width: 560px) {
+      .intro { padding-top: 48px; }
+      .toolbar { align-items: flex-start; flex-direction: column; }
+      .story { padding: 18px; }
+      h2 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">밤의 서랍</div>
+      <div>Stories collected after dark</div>
+    </header>
+
+    <main>
+      <section class="intro">
+        <div class="eyebrow">괴담 수집소 · No. 001</div>
+        <h1>밤에 들은<br>이야기들.</h1>
+        <p>
+          익숙한 장소가 낯설게 느껴지는 순간,
+          누군가에게 들은 이야기를 조용히 모읍니다.
+        </p>
+        <span class="note">아래 이야기는 기능 확인을 위한 창작 예시입니다.</span>
+      </section>
+
+      <section class="toolbar" aria-label="괴담 정렬">
+        <span id="sort-label">공포도 높은 순</span>
+        <div class="buttons">
+          <button id="fear-button" class="active" type="button">공포도순</button>
+          <button id="title-button" type="button">제목 가나다순</button>
+        </div>
+      </section>
+
+      <section id="stories" aria-live="polite"></section>
+
+      <footer>
+        <strong>정렬 알고리즘:</strong>
+        병합 정렬은 목록을 작은 부분으로 나누어 각각 정렬한 뒤,
+        정렬된 순서대로 다시 합칩니다. 실행 시간은 O(n log n)입니다.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const stories = [
+      {
+        title: "복도 끝의 문",
+        place: "서울 · 오래된 아파트",
+        fear: 5,
+        teaser: "복도 끝에는 원래 문이 하나도 없어야 했다.",
+        body: "이사 온 첫날 밤, 복도 끝에서 문고리 돌아가는 소리가 났다. 문을 열어 확인했지만 복도에는 아무것도 없었다. 다음 날 관리실에 물어보자, 관리인은 그쪽 벽을 가리키며 말했다. “거긴 처음부터 막혀 있었는데요.”"
+      },
+      {
+        title: "마지막 버스",
+        place: "경기 · 외곽 정류장",
+        fear: 4,
+        teaser: "막차에 오른 승객은 운전기사와 나뿐이었다.",
+        body: "버스가 종점에 도착했을 때 기사님이 뒤를 돌아보며 물었다. “아까 맨 뒷자리에 앉은 분은 어디서 내렸어요?” 나는 처음부터 버스에 우리 둘뿐이었다고 대답했다. 그 순간, 텅 빈 맨 뒷자리에서 하차 안내음이 울렸다."
+      },
+      {
+        title: "누군가 내 이름을 불렀다",
+        place: "강원 · 산길",
+        fear: 3,
+        teaser: "뒤에서 들린 목소리는 분명 내 목소리였다.",
+        body: "산길을 내려오던 중 뒤에서 내 이름을 부르는 소리가 들렸다. 돌아보았지만 아무도 없었다. 다시 걸음을 옮기자 이번에는 앞쪽에서 같은 목소리가 들렸다. “뒤돌아보지 마.”"
+      }
+    ];
+
+    function mergeSort(items, compare) {
+      if (items.length <= 1) return items;
+
+      const middle = Math.floor(items.length / 2);
+      const left = mergeSort(items.slice(0, middle), compare);
+      const right = mergeSort(items.slice(middle), compare);
+
+      const merged = [];
+      let i = 0;
+      let j = 0;
+
+      while (i < left.length && j < right.length) {
+        if (compare(left[i], right[j]) <= 0) {
+          merged.push(left[i]);
+          i++;
+        } else {
+          merged.push(right[j]);
+          j++;
+        }
+      }
+
+      return merged.concat(left.slice(i), right.slice(j));
+    }
+
+    const storiesElement = document.querySelector("#stories");
+    const sortLabel = document.querySelector("#sort-label");
+    const fearButton = document.querySelector("#fear-button");
+    const titleButton = document.querySelector("#title-button");
+
+    function showStories(sortBy) {
+      const compare = sortBy === "fear"
+        ? (a, b) => b.fear - a.fear
+        : (a, b) => a.title.localeCompare(b.title, "ko");
+
+      const sortedStories = mergeSort(stories, compare);
+
+      storiesElement.innerHTML = sortedStories.map(story => `
+        <article class="story">
+          <div class="story-top">
+            <span class="place">${story.place}</span>
+            <span class="fear">공포도 ${story.fear} / 5</span>
+          </div>
+          <h2>${story.title}</h2>
+          <p class="teaser">${story.teaser}</p>
+          <details>
+            <summary>이야기 읽기</summary>
+            <p class="full-story">${story.body}</p>
+          </details>
+        </article>
+      `).join("");
+
+      const fearSelected = sortBy === "fear";
+      fearButton.classList.toggle("active", fearSelected);
+      titleButton.classList.toggle("active", !fearSelected);
+      sortLabel.textContent = fearSelected ? "공포도 높은 순" : "제목 가나다순";
+    }
+
+    fearButton.addEventListener("click", () => showStories("fear"));
+    titleButton.addEventListener("click", () => showStories("title"));
+
+    showStories("fear");
+  </script>
+</body>
+</html>
